@@ -18,9 +18,9 @@
 
 ## SIMD 枚举参数
 
-规格已将 PAT、ROUND、PART、POS 定为枚举，并为 vlds / vld2 / vsts / pld 的 dist、vunpack.pp、vdiv / vexp / vsqrt 的 precision 分别约定 LOAD_DIST / STORE_DIST / PRED_DIST、PP、PRECISION。各接口仅接受参数表列出的成员；vsts.dist 和 precision 保留 None。
+规格已将 PAT、ROUND、PART、POS 定为枚举，并为 vlds / vld2 / vsts / pld 的 dist、vunpack.pp、vdiv / vexp / vsqrt 的 precision 分别约定 LOAD_DIST / STORE_DIST / PRED_DIST、PP、PRECISION；membar.scope 使用 SCOPE 枚举。各接口仅接受参数表列出的成员；vsts.dist 和 precision 保留 None。
 
-实现基线 `0227cde` / `d54604c` 中，PAT / ROUND / PART / POS 仍是字符串常量集合，新增枚举尚未提供。待前端补枚举定义、成员校验及字符串拒绝用例；本次仅更新规格，未修改代码或执行设备验证。
+实现基线 `0227cde` / `d54604c` 中，PAT / ROUND / PART / POS 仍是字符串常量集合，membar.scope 仍接收字符串，新增枚举尚未提供。待前端补枚举定义、成员校验及字符串拒绝用例；本次仅更新规格，未修改代码或执行设备验证。
 
 <a name="simd-mode-contract"></a>
 
@@ -40,9 +40,9 @@ mask 决定参与计算的输入；归约的结果位置始终写入，mode 控�
 
 | 接口 | 尚需确认或补测 |
 | --- | --- |
-| pset | 旧前端 pset(64) 生成 32 个谓词元素，B64 数据向量却有 64 个；正文保留该限制，并给出 pge(64, 64) 的等长全真写法。M3 / M4 的逻辑排列需按目标补充，不能把枚举注释当作完整语义。 |
+| pset | 固定图样统一使用 pset。旧前端 pset(64) 生成 32 个谓词元素，B64 数据向量却有 64 个；64 元素全真谓词使用 pset(32, PAT.ALL)。需直接验证谓词长度和 true/false 分布，并补充 M3 / M4 的目标语义。 |
 | vcmp / vcmps | 保留现有 EQ / LT 默认值；“修改默认”的评审未给出目标值，待确认。补浮点特殊值与无符号比较边界。 |
-| vci / pge | 现有引用主要作为其他测试的辅助操作；需直接验证递增序列、谓词长度和 true/false 分布。 |
+| vci | 现有引用主要作为其他测试的辅助操作；需直接验证递增序列。 |
 | vcmax / vcmin | add_cmp.py 只核对 lane 0；新增 merge 和尾部规则尚无对应测试。 |
 | vmin / vmuls | 已改为公共专用测试；vmin.py 的 MERGING 参考值仍为补零，需按新规格更新。vmuls 的 float32 用例不能覆盖 B64 常量和标量拒绝规则。 |
 | vaddc / vsubc / vaddcs / vsubcs | 保留当前长度差异：vaddc 至多 64 元素，后三者要求满 64 元素；统一限制前先确认短向量需求。 |

@@ -59,7 +59,7 @@ def example(x_ub, y_ub):
 
 | 参数名 | 参数含义 | 参数类型 | 合法参数范围 | 其他约束 | 默认值 |
 | --- | --- | --- | --- | --- | --- |
-| `scope` | 指定执行域或地址空间 | 编译期 tla.simd.SCOPE | SCOPE.VV_ALL / SCOPE.VST_VLD / SCOPE.VLD_VST / SCOPE.VST_VST / SCOPE.VS_ALL / SCOPE.VST_LD / SCOPE.VLD_ST / SCOPE.VST_ST / SCOPE.SV_ALL / SCOPE.ST_VLD / SCOPE.LD_VST / SCOPE.ST_VST / SCOPE.SS_ALL / SCOPE.ST_LD / SCOPE.LD_ST / SCOPE.ST_ST | SIMD VF 内的标量或向量 load/store 屏障，按访问顺序选择。不在上表的取值直接报错。 | 必填 |
+| `scope` | 指定前后访存操作的顺序 | 编译期 tla.simd.SCOPE 枚举 | SCOPE.VV_ALL / SCOPE.VST_VLD / SCOPE.VLD_VST / SCOPE.VST_VST / SCOPE.VS_ALL / SCOPE.VST_LD / SCOPE.VLD_ST / SCOPE.VST_ST / SCOPE.SV_ALL / SCOPE.ST_VLD / SCOPE.LD_VST / SCOPE.ST_VST / SCOPE.SS_ALL / SCOPE.ST_LD / SCOPE.LD_ST / SCOPE.ST_ST | 仅接受 SCOPE 枚举成员；用于 SIMD VF 内的访存排序，如 VST_VLD 表示向量写→向量读。 | 必填 |
 
 **调用示例**
 
@@ -101,8 +101,8 @@ def example(src_ub, dst_ub):
 @tla.jit
 def example():
     with tla.scope.simd():
-        a = tla.simd.pge(32, 64)
-        b = tla.simd.pge(16, 64)
+        a = tla.simd.pset(32, dist=tla.simd.PAT.VL32)
+        b = tla.simd.pset(32, dist=tla.simd.PAT.VL16)
         mask = tla.simd.pand(a, b)
 ```
 
@@ -129,7 +129,7 @@ def example():
 @tla.jit
 def example():
     with tla.scope.simd():
-        a = tla.simd.pge(32, 64)
+        a = tla.simd.pset(32, dist=tla.simd.PAT.VL32)
         mask = tla.simd.pnot(a)
 ```
 
@@ -152,7 +152,7 @@ def example():
 
 `PAT.ALL` 全部为 true；`PAT.ALLF` 全部为 false；`PAT.VL1`～`PAT.VL128` 中，数字表示置 true 的前缀长度，不得超过谓词长度。`PAT.H`、`PAT.Q` 分别将前一半、前四分之一置 true，其余为 false。
 
-`pset(64)` 只有 32 个谓词元素，不能直接作为 64 元素数据向量的 mask。需要 64 个全真谓词时使用 `pge(64, 64)`。
+`pset(64)` 只有 32 个谓词元素，不能直接作为 64 元素数据向量的 mask。需要 64 个全真谓词时使用 `pset(32, dist=tla.simd.PAT.ALL)`。
 
 **调用示例**
 
@@ -189,8 +189,8 @@ def example():
 @tla.jit
 def example():
     with tla.scope.simd():
-        a = tla.simd.pge(32, 64)
-        b = tla.simd.pge(16, 64)
+        a = tla.simd.pset(32, dist=tla.simd.PAT.VL32)
+        b = tla.simd.pset(32, dist=tla.simd.PAT.VL16)
         mask = tla.simd.pxor(a, b)
 ```
 
@@ -635,6 +635,8 @@ def example(a_ub):
 | `mask` | 控制各 lane 是否启用的谓词 | tla.vector（int1 谓词） 或 None | 数据类型：<br>B1：int1<br>lane 数：与相应向量一致 | None 表示全部参与；mask 为 false 的位置返回 false。 | None |
 | `op` | 比较关系 | 编译期 tla.simd.CMP 枚举 | CMP.EQ / CMP.NE / CMP.GT / CMP.GE / CMP.LT / CMP.LE / CMP.UGT / CMP.UGE / CMP.ULT / CMP.ULE | 仅接受 CMP 枚举成员。GT / GE / LT / LE 按输入 dtype 比较；UGT / UGE / ULT / ULE 按无符号位模式比较，只接受整数。 | CMP.EQ |
 
+![vcmp 逐元素比较与 mask 对结果的影响](images/simd/vcmp.svg)
+
 **调用示例**
 
 输入为各含 64 个 float32 元素的连续 UB 缓冲区。
@@ -727,6 +729,8 @@ float16 → float32 时，EVEN / ODD 分别读取源的偶数 / 奇数位置；f
 
 浮点转整数先舍入，再按 sat 决定是否饱和；sat=False 不保证溢出回绕。浮点特殊值按目标指令处理，整数转浮点和浮点缩窄可能丢失精度。
 
+![vcvt 在 float32 与 float16 间转换时的奇偶位置和源 mask 对应关系](images/simd/vcvt.svg)
+
 **调用示例**
 
 a_ub 为连续 64 个 int32 元素；本例使用默认 ROUND.R。
@@ -757,6 +761,8 @@ def example(a_ub):
 | `src2` | 第二个输入向量 | tla.vector | 数据类型：<br>B8：float8e4m3fn / float8e5m2 / int8 / uint8<br>B16：int16 / uint16 / float16 / bfloat16<br>B32：int32 / uint32 / float32<br>B64：不支持 | 两个输入同 dtype（含符号性）、同 lane 数；不一致抛 ValueError，不隐式转换。两个结果均与输入同型。 | 必填 |
 
 先拼接两个输入，再分别取偶数和奇数位置。
+
+![vdintlv 拼接两个向量后按偶数和奇数位置拆分](images/simd/vdintlv.svg)
 
 **调用示例**
 
@@ -978,6 +984,8 @@ def example(x_ub, indices_ub):
 
 将两个输入逐元素交错，再按输入长度分成两个结果。
 
+![vintlv 交错两个向量并返回前后两个结果](images/simd/vintlv.svg)
+
 **调用示例**
 
 输入为各含 64 个 float32 元素的连续 UB 缓冲区。
@@ -1075,6 +1083,8 @@ def example(x_ub):
 
 设每个寄存器有 N 个元素，从最终起点连续读 2N 个元素：even[i] 取第 2i 个，odd[i] 取第 2i+1 个。16 位数据 N=128，32 位数据 N=64。无 mask，也不更新地址。
 
+![vld2 连续加载 UB 数据并按奇偶位置返回两个向量](images/simd/vld2.svg)
+
 **调用示例**
 
 x_ub 为连续 128 个 float32 元素，满足完整读取范围。
@@ -1107,6 +1117,8 @@ def example(x_ub):
 有限正数输入范围为 `0 < x ≤ 65504`（float16）或 `0 < x ≤ (2−2⁻²³)×2¹²⁷`（float32）的可表示值。零、负数、Inf、NaN 和非规格化数的行为须按目标确认；不逐 lane 检查数值。
 
 例如输入 `1、e、e²`，结果约为 `0、1、2`；实际结果有浮点舍入误差。
+
+![vln 的逐元素自然对数以及 ZEROING 和 MERGING 行为](images/simd/vln.svg)
 
 **调用示例**
 
@@ -1566,7 +1578,7 @@ def example(src_ub, indices_ub, dst_ub):
     with tla.scope.simd():
         values = tla.simd.vlds(src_ub[0])
         indices = tla.simd.vlds(indices_ub[0])
-        tla.simd.vscatter(dst_ub, indices, values, tla.simd.pge(32, 64))
+        tla.simd.vscatter(dst_ub, indices, values, tla.simd.pset(32, dist=tla.simd.PAT.VL32))
 ```
 
 <a name="api-tla-simd-vsel"></a>
@@ -1595,7 +1607,7 @@ def example(a_ub, b_ub):
     with tla.scope.simd():
         a = tla.simd.vlds(a_ub[0])
         b = tla.simd.vlds(b_ub[0])
-        result = tla.simd.vsel(tla.simd.pge(32, 64), a, b)
+        result = tla.simd.vsel(tla.simd.pset(32, dist=tla.simd.PAT.VL32), a, b)
 ```
 
 仓库测试：[tla_ut/simd/tail_mask.py](https://github.com/triton-lang/triton-ascend/blob/074cf62907f815694a01e5cdc4ac78a90610ae82/third_party/ascend/unittest/tla_ut/simd/tail_mask.py#L29)。
@@ -1887,34 +1899,6 @@ def example(a_ub, b_ub):
 
 仓库测试：[tla_ut/simd/vxor.py](https://github.com/triton-lang/triton-ascend/blob/074cf62907f815694a01e5cdc4ac78a90610ae82/third_party/ascend/unittest/tla_ut/simd/vxor.py#L38)。
 
-<a name="api-tla-simd-pge"></a>
-
-## tla.simd.pge
-
-签名：`tla.simd.pge(n, lanes)`
-
-返回：谓词向量。
-
-编译表示：ave.hir.pge。
-
-| 参数名 | 参数含义 | 参数类型 | 合法参数范围 | 其他约束 | 默认值 |
-| --- | --- | --- | --- | --- | --- |
-| `n` | 前缀中为真的 lane 数 | 编译期 int | 1 / 2 / 3 / 4 / 8 / 16 / 32 / 64 / 128 | 前 n 个 lane 置 true，结果 lanes 至少要容纳 n。 | 必填 |
-| `lanes` | 谓词 lane 数 | 编译期 int | 正整数，至多 256 | 结果为 int1。有效组合需匹配指定 VL 图样和消费指令。 | 必填 |
-
-`n` 是 true 的个数，`lanes` 是谓词总长度，二者都不是数据位宽。例如 `pge(32, 64)` 返回前 32 个 true、后 32 个 false。全 false 可写成 `pnot(pset(32))`，不使用 `pge(0, 64)`。
-
-**调用示例**
-
-```python
-@tla.jit
-def example():
-    with tla.scope.simd():
-        mask = tla.simd.pge(32, 64)
-```
-
-仓库测试：[tla_ut/simd/vsstb.py](https://github.com/triton-lang/triton-ascend/blob/074cf62907f815694a01e5cdc4ac78a90610ae82/third_party/ascend/unittest/tla_ut/simd/vsstb.py#L29)。
-
 <a name="api-tla-simd-tail-mask"></a>
 
 ## tla.simd.tail_mask
@@ -1965,8 +1949,8 @@ def example(n):
 @tla.jit
 def example():
     with tla.scope.simd():
-        a = tla.simd.pge(32, 64)
-        b = tla.simd.pge(16, 64)
+        a = tla.simd.pset(32, dist=tla.simd.PAT.VL32)
+        b = tla.simd.pset(32, dist=tla.simd.PAT.VL16)
         mask = tla.simd.por(a, b)
 ```
 
@@ -1996,8 +1980,8 @@ def example():
 @tla.jit
 def example():
     with tla.scope.simd():
-        a = tla.simd.pge(32, 64)
-        b = tla.simd.pge(16, 64)
+        a = tla.simd.pset(32, dist=tla.simd.PAT.VL32)
+        b = tla.simd.pset(32, dist=tla.simd.PAT.VL16)
         mask = tla.simd.psel(a, b, a)
 ```
 
@@ -2090,6 +2074,8 @@ def example():
 
 两个输入必须都是 int1 且 lane 数相同；不一致或 lane 数不在 64 / 128 / 256 中时抛 ValueError，不做隐式转换或广播。
 
+![pintlv 交错两个逻辑谓词并返回前后两个结果](images/simd/pintlv.svg)
+
 **调用示例**
 
 a、b 都是 64 lanes 的逻辑谓词。
@@ -2098,8 +2084,8 @@ a、b 都是 64 lanes 的逻辑谓词。
 @tla.jit
 def example():
     with tla.scope.simd():
-        a = tla.simd.pge(32, 64)
-        b = tla.simd.pge(16, 64)
+        a = tla.simd.pset(32, dist=tla.simd.PAT.VL32)
+        b = tla.simd.pset(32, dist=tla.simd.PAT.VL16)
         first, second = tla.simd.pintlv(a, b)
 ```
 
@@ -2126,6 +2112,8 @@ def example():
 
 两个输入必须都是 int1 且 lane 数相同；不一致或 lane 数不在 64 / 128 / 256 中时抛 ValueError，不做隐式转换或广播。
 
+![pdintlv 将拼接后的逻辑谓词按奇偶位置拆分](images/simd/pdintlv.svg)
+
 **调用示例**
 
 a、b 都是 64 lanes 的逻辑谓词。
@@ -2134,8 +2122,8 @@ a、b 都是 64 lanes 的逻辑谓词。
 @tla.jit
 def example():
     with tla.scope.simd():
-        a = tla.simd.pge(32, 64)
-        b = tla.simd.pge(16, 64)
+        a = tla.simd.pset(32, dist=tla.simd.PAT.VL32)
+        b = tla.simd.pset(32, dist=tla.simd.PAT.VL16)
         first, second = tla.simd.pdintlv(a, b)
 ```
 
@@ -2195,7 +2183,7 @@ mask_ub 为 32 字节对齐的 UB 字节缓冲区。
 @tla.jit
 def example(mask_ub):
     with tla.scope.simd():
-        mask = tla.simd.pge(32, 64)
+        mask = tla.simd.pset(32, dist=tla.simd.PAT.VL32)
         tla.simd.pst(mask_ub, mask)
 ```
 
@@ -2423,7 +2411,7 @@ mask 为 true 的元素按原顺序压到向量前端。尾部在 ZEROING 模式
 def example(a_ub):
     with tla.scope.simd():
         a = tla.simd.vlds(a_ub[0])
-        result = tla.simd.vsqz(a, tla.simd.pge(32, 64))
+        result = tla.simd.vsqz(a, tla.simd.pset(32, dist=tla.simd.PAT.VL32))
 ```
 
 仓库测试：[tla_ut/simd/vsqz.py](https://github.com/triton-lang/triton-ascend/blob/aa927de3356e671160f2b3cf29fe23b6072f2b16/third_party/ascend/unittest/tla_ut/simd/vsqz.py#L13)。
@@ -2455,7 +2443,7 @@ def example(a_ub):
 @tla.jit
 def example(out_ub):
     with tla.scope.simd():
-        counts = tla.simd.vusqz(tla.simd.pge(32, 64))
+        counts = tla.simd.vusqz(tla.simd.pset(32, dist=tla.simd.PAT.VL32))
         tla.simd.vsts(out_ub[0], counts, dist=tla.simd.STORE_DIST.NORM_B32)
 ```
 
