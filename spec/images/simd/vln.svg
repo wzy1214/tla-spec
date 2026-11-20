@@ -1,69 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="602" viewBox="0 0 960 602" role="img" aria-labelledby="title desc">
-  <title id="title">vln · 逐元素自然对数</title>
-  <desc id="desc">数学示意：输入为 1、e、e 的平方、e 的立方，第三个位置 mask 为 false。ZEROING 将该位置置零，MERGING 保留源值 e 的平方；其他位置得到约 0、1、3。</desc>
-  <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#8292A4"/>
-    </marker>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="507" viewBox="0 0 1000 507" role="img" aria-labelledby="title desc">
+  <title id="title">vln：自然对数与掩码结果模式</title>
+  <desc id="desc">数学示意：输入 1、e、e 的平方、e 的立方，mask 为 1、1、0、1。ZEROING 得到约 0、1、0、3，MERGING 得到约 0、1、e 的平方、3。禁用位置保留源值或填零，其他位置计算自然对数。实际结果有浮点误差。</desc>
   <style>
-    text { font-family: Arial, "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; fill: #183047; }
-    .title { font-size: 28px; font-weight: 700; }
-    .subtitle { font-size: 18px; fill: #536478; }
-    .label { font-size: 19px; font-weight: 600; }
-    .small { font-size: 17px; fill: #536478; }
-    .index { font-size: 15px; fill: #697889; }
-    .cell { font-size: 21px; font-weight: 600; }
+    text { font-family: Arial, "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; fill: #191919; font-size: 26px; }
+    .value { fill: #FFFFFF; }
+    .note { font-size: 20px; }
+    .index { font-size: 18px; }
+    .caption { font-size: 25px; }
   </style>
-  <rect x="0.5" y="0.5" width="959" height="601" rx="12" fill="#FFFFFF" stroke="#D5DFE9"/>
-  <text x="32" y="49" class="title">vln · 逐元素自然对数</text>
-  <text x="928" y="46" class="small" text-anchor="end">TLA / SIMD</text>
-  <text x="32" y="81" class="subtitle">活跃位置计算 ln(src)，其余位置按 mode 处理。</text>
-  <line x1="32" y1="103" x2="928" y2="103" stroke="#D5DFE9" stroke-width="1.5"/>
-  <text x="383.0" y="139" class="small" text-anchor="middle">位置 0</text>
-  <text x="523.0" y="139" class="small" text-anchor="middle">位置 1</text>
-  <text x="663.0" y="139" class="small" text-anchor="middle">位置 2</text>
-  <text x="803.0" y="139" class="small" text-anchor="middle">位置 3</text>
-  <text x="56" y="191" class="label">src</text>
-  <rect x="320" y="158" width="126" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="383.0" y="190.0" class="cell" text-anchor="middle" style="fill:#214E94">1</text>
-  <rect x="460" y="158" width="126" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="523.0" y="190.0" class="cell" text-anchor="middle" style="fill:#214E94">e</text>
-  <rect x="600" y="158" width="126" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="663.0" y="190.0" class="cell" text-anchor="middle" style="fill:#214E94">e²</text>
-  <rect x="740" y="158" width="126" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="803.0" y="190.0" class="cell" text-anchor="middle" style="fill:#214E94">e³</text>
-  <text x="56" y="265" class="label">mask</text>
-  <rect x="320" y="232" width="126" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="383.0" y="264.0" class="cell" text-anchor="middle" style="fill:#146350">true</text>
-  <rect x="460" y="232" width="126" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="523.0" y="264.0" class="cell" text-anchor="middle" style="fill:#146350">true</text>
-  <rect x="600" y="232" width="126" height="50" rx="6" fill="#F1F3F5" stroke="#C5CED7"/>
-  <text x="663.0" y="264.0" class="cell" text-anchor="middle" style="fill:#697889">false</text>
-  <rect x="740" y="232" width="126" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="803.0" y="264.0" class="cell" text-anchor="middle" style="fill:#146350">true</text>
-  <text x="56" y="390" class="label">ZEROING</text>
-  <rect x="320" y="357" width="126" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="383.0" y="389.0" class="cell" text-anchor="middle" style="fill:#146350">0</text>
-  <rect x="460" y="357" width="126" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="523.0" y="389.0" class="cell" text-anchor="middle" style="fill:#146350">≈ 1</text>
-  <rect x="600" y="357" width="126" height="50" rx="6" fill="#F1F3F5" stroke="#C5CED7"/>
-  <text x="663.0" y="389.0" class="cell" text-anchor="middle" style="fill:#697889">0</text>
-  <rect x="740" y="357" width="126" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="803.0" y="389.0" class="cell" text-anchor="middle" style="fill:#146350">≈ 3</text>
-  <text x="56" y="466" class="label">MERGING</text>
-  <rect x="320" y="433" width="126" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="383.0" y="465.0" class="cell" text-anchor="middle" style="fill:#146350">0</text>
-  <rect x="460" y="433" width="126" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="523.0" y="465.0" class="cell" text-anchor="middle" style="fill:#146350">≈ 1</text>
-  <rect x="600" y="433" width="126" height="50" rx="6" fill="#FFF2D9" stroke="#BB8428"/>
-  <text x="663.0" y="465.0" class="cell" text-anchor="middle" style="fill:#795319">e²</text>
-  <rect x="740" y="433" width="126" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="803.0" y="465.0" class="cell" text-anchor="middle" style="fill:#146350">≈ 3</text>
-  <line x1="56" y1="316" x2="904" y2="316" stroke="#D5DFE9" stroke-width="1.5"/>
-  <text x="56" y="339" class="small">mask = false 的位置</text>
-  <line x1="32" y1="509" x2="928" y2="509" stroke="#D5DFE9" stroke-width="1.5"/>
-  <text x="32" y="534" class="small">位置 2：ZEROING 填 0；MERGING 保留 src[2]。</text>
-  <text x="32" y="559" class="small">e 为自然常数；图中只作数学示意，实际结果受浮点表示和指令精度影响。</text>
+  <rect width="1000" height="507" fill="#FFFFFF"/>
+  <g id="src">
+    <rect x="360" y="40" width="110" height="58" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="415" y="78" text-anchor="middle" class="value">1</text>
+    <rect x="470" y="40" width="110" height="58" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="525" y="78" text-anchor="middle" class="value">e</text>
+    <rect x="580" y="40" width="110" height="58" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="635" y="78" text-anchor="middle" class="value">e²</text>
+    <rect x="690" y="40" width="110" height="58" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="745" y="78" text-anchor="middle" class="value">e³</text>
+  </g>
+  <text x="336" y="78" text-anchor="end">src</text>
+  <g id="mask">
+    <rect x="360" y="125" width="110" height="44" fill="#D6D6D6" stroke="#191919" stroke-width="2.4"/>
+  <text x="415" y="156" text-anchor="middle" class="value" style="fill:#191919">1</text>
+    <rect x="470" y="125" width="110" height="44" fill="#D6D6D6" stroke="#191919" stroke-width="2.4"/>
+  <text x="525" y="156" text-anchor="middle" class="value" style="fill:#191919">1</text>
+    <rect x="580" y="125" width="110" height="44" fill="#D6D6D6" stroke="#191919" stroke-width="2.4"/>
+  <text x="635" y="156" text-anchor="middle" class="value" style="fill:#191919">0</text>
+    <rect x="690" y="125" width="110" height="44" fill="#D6D6D6" stroke="#191919" stroke-width="2.4"/>
+  <text x="745" y="156" text-anchor="middle" class="value" style="fill:#191919">1</text>
+  </g>
+  <text x="336" y="156" text-anchor="end">mask</text>
+  <polygon points="571,191 589,191 589,213 597.5,213 580,241 562.5,213 571,213" fill="#582877" stroke="#191919" stroke-width="2.4"/>
+  <text x="614" y="223" text-anchor="start" class="note">ln</text>
+  <g id="zeroing">
+    <rect x="360" y="265" width="110" height="58" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="415" y="303" text-anchor="middle" class="value">0</text>
+    <rect x="470" y="265" width="110" height="58" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="525" y="303" text-anchor="middle" class="value">≈ 1</text>
+    <rect x="580" y="265" width="110" height="58" fill="#EEEEEE" stroke="#191919" stroke-width="2.4"/>
+  <text x="635" y="303" text-anchor="middle" class="value" style="fill:#191919">0</text>
+    <rect x="690" y="265" width="110" height="58" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="745" y="303" text-anchor="middle" class="value">≈ 3</text>
+  </g>
+  <text x="336" y="303" text-anchor="end">ZEROING</text>
+  <g id="merging">
+    <rect x="360" y="348" width="110" height="58" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="415" y="386" text-anchor="middle" class="value">0</text>
+    <rect x="470" y="348" width="110" height="58" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="525" y="386" text-anchor="middle" class="value">≈ 1</text>
+    <rect x="580" y="348" width="110" height="58" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="635" y="386" text-anchor="middle" class="value">e²</text>
+    <rect x="690" y="348" width="110" height="58" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="745" y="386" text-anchor="middle" class="value">≈ 3</text>
+  </g>
+  <text x="336" y="386" text-anchor="end">MERGING</text>
+  <text x="500" y="451" text-anchor="middle" class="caption">vln：逐元素计算 ln(src)</text>
+  <text x="500" y="484" text-anchor="middle" class="note">mask = 0：ZEROING 填 0，MERGING 保留 src；e 为自然常数，数值仅作示意。</text>
 </svg>

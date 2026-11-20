@@ -1,77 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="580" viewBox="0 0 960 580" role="img" aria-labelledby="title desc">
-  <title id="title">vld2 · 连续加载并去交错</title>
-  <desc id="desc">从 src 加 off 的元素位置开始读取连续数据 x0 至 x7。even 返回 x0、x2、x4、x6，odd 返回 x1、x3、x5、x7；图中 N=4 仅用于说明排列。</desc>
-  <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#8292A4"/>
-    </marker>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="480" viewBox="0 0 1280 480" role="img" aria-labelledby="title desc">
+  <title id="title">vld2：连续加载后按奇偶位置拆分</title>
+  <desc id="desc">从 src 下标加 off 的最终起点连续读取 2N 个元素。绿色为偶数位置，蓝色为奇数位置；even 取位置 0、2、4 等，odd 取位置 1、3、5 等。图中 N=8 只说明排列，16 位数据实际 N=128，32 位数据实际 N=64。</desc>
   <style>
-    text { font-family: Arial, "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; fill: #183047; }
-    .title { font-size: 28px; font-weight: 700; }
-    .subtitle { font-size: 18px; fill: #536478; }
-    .label { font-size: 19px; font-weight: 600; }
-    .small { font-size: 17px; fill: #536478; }
-    .index { font-size: 15px; fill: #697889; }
-    .cell { font-size: 21px; font-weight: 600; }
+    text { font-family: Arial, "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; fill: #191919; font-size: 26px; }
+    .value { fill: #FFFFFF; }
+    .note { font-size: 20px; }
+    .index { font-size: 18px; }
+    .caption { font-size: 25px; }
   </style>
-  <rect x="0.5" y="0.5" width="959" height="579" rx="12" fill="#FFFFFF" stroke="#D5DFE9"/>
-  <text x="32" y="49" class="title">vld2 · 连续加载并去交错</text>
-  <text x="928" y="46" class="small" text-anchor="end">TLA / SIMD</text>
-  <text x="32" y="81" class="subtitle">从最终起点连续读取 2N 个元素，分别输出偶数和奇数位置。</text>
-  <line x1="32" y1="103" x2="928" y2="103" stroke="#D5DFE9" stroke-width="1.5"/>
-  <text x="32" y="142" class="label">最终起点 = src 的下标 + off（单位：元素）</text>
-  <text x="32" y="177" class="small">连续 UB 数据</text>
-  <rect x="80" y="220" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="126.0" y="252.0" class="cell" text-anchor="middle" style="fill:#214E94">x0</text>
-  <text x="126.0" y="210" class="index" text-anchor="middle">0</text>
-  <rect x="181" y="220" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="227.0" y="252.0" class="cell" text-anchor="middle" style="fill:#146350">x1</text>
-  <text x="227.0" y="210" class="index" text-anchor="middle">1</text>
-  <rect x="282" y="220" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="328.0" y="252.0" class="cell" text-anchor="middle" style="fill:#214E94">x2</text>
-  <text x="328.0" y="210" class="index" text-anchor="middle">2</text>
-  <rect x="383" y="220" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="429.0" y="252.0" class="cell" text-anchor="middle" style="fill:#146350">x3</text>
-  <text x="429.0" y="210" class="index" text-anchor="middle">3</text>
-  <rect x="484" y="220" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="530.0" y="252.0" class="cell" text-anchor="middle" style="fill:#214E94">x4</text>
-  <text x="530.0" y="210" class="index" text-anchor="middle">4</text>
-  <rect x="585" y="220" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="631.0" y="252.0" class="cell" text-anchor="middle" style="fill:#146350">x5</text>
-  <text x="631.0" y="210" class="index" text-anchor="middle">5</text>
-  <rect x="686" y="220" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="732.0" y="252.0" class="cell" text-anchor="middle" style="fill:#214E94">x6</text>
-  <text x="732.0" y="210" class="index" text-anchor="middle">6</text>
-  <rect x="787" y="220" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="833.0" y="252.0" class="cell" text-anchor="middle" style="fill:#146350">x7</text>
-  <text x="833.0" y="210" class="index" text-anchor="middle">7</text>
-  <path d="M 277 272 V 309 H 248 V 337" fill="none" stroke="#8292A4" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
-  <path d="M 681 272 V 309 H 712 V 337" fill="none" stroke="#8292A4" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
-  <rect x="32" y="345" width="432" height="121" rx="8" fill="#F8FAFC" stroke="#D5DFE9"/>
-  <text x="52" y="376" class="label">even</text>
-  <text x="444" y="376" class="small" text-anchor="end">取第 2i 个元素</text>
-  <rect x="52" y="394" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="98.0" y="426.0" class="cell" text-anchor="middle" style="fill:#214E94">x0</text>
-  <rect x="152" y="394" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="198.0" y="426.0" class="cell" text-anchor="middle" style="fill:#214E94">x2</text>
-  <rect x="252" y="394" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="298.0" y="426.0" class="cell" text-anchor="middle" style="fill:#214E94">x4</text>
-  <rect x="352" y="394" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="398.0" y="426.0" class="cell" text-anchor="middle" style="fill:#214E94">x6</text>
-  <rect x="496" y="345" width="432" height="121" rx="8" fill="#F8FAFC" stroke="#D5DFE9"/>
-  <text x="516" y="376" class="label">odd</text>
-  <text x="908" y="376" class="small" text-anchor="end">取第 2i+1 个元素</text>
-  <rect x="516" y="394" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="562.0" y="426.0" class="cell" text-anchor="middle" style="fill:#146350">x1</text>
-  <rect x="616" y="394" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="662.0" y="426.0" class="cell" text-anchor="middle" style="fill:#146350">x3</text>
-  <rect x="716" y="394" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="762.0" y="426.0" class="cell" text-anchor="middle" style="fill:#146350">x5</text>
-  <rect x="816" y="394" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="862.0" y="426.0" class="cell" text-anchor="middle" style="fill:#146350">x7</text>
-  <line x1="32" y1="487" x2="928" y2="487" stroke="#D5DFE9" stroke-width="1.5"/>
-  <text x="32" y="512" class="small">图中 N = 4 仅作排列示意。实际 N：16 位数据为 128，32 位数据为 64。</text>
-  <text x="32" y="537" class="small">起点后须容纳两个完整向量；本接口不接收 mask，也不更新地址。</text>
+  <rect width="1280" height="480" fill="#FFFFFF"/>
+  <text x="688" y="27" text-anchor="middle" class="note">起点 = src 的下标 + off（元素偏移）</text>
+  <g id="ub">
+    <rect x="256" y="48" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="283" y="88" text-anchor="middle" class="value">0</text>
+    <rect x="310" y="48" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="337" y="88" text-anchor="middle" class="value">1</text>
+    <rect x="364" y="48" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="391" y="88" text-anchor="middle" class="value">2</text>
+    <rect x="418" y="48" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="445" y="88" text-anchor="middle" class="value">3</text>
+    <rect x="472" y="48" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="499" y="88" text-anchor="middle" class="value">4</text>
+    <rect x="526" y="48" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="553" y="88" text-anchor="middle" class="value">5</text>
+    <rect x="580" y="48" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="607" y="88" text-anchor="middle" class="value">6</text>
+    <rect x="634" y="48" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="661" y="88" text-anchor="middle" class="value">7</text>
+    <rect x="688" y="48" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="715" y="88" text-anchor="middle" class="value">8</text>
+    <rect x="742" y="48" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="769" y="88" text-anchor="middle" class="value">9</text>
+    <rect x="796" y="48" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="823" y="88" text-anchor="middle" class="value">10</text>
+    <rect x="850" y="48" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="877" y="88" text-anchor="middle" class="value">11</text>
+    <rect x="904" y="48" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="931" y="88" text-anchor="middle" class="value">12</text>
+    <rect x="958" y="48" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="985" y="88" text-anchor="middle" class="value">13</text>
+    <rect x="1012" y="48" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="1039" y="88" text-anchor="middle" class="value">14</text>
+    <rect x="1066" y="48" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="1093" y="88" text-anchor="middle" class="value">15</text>
+  </g>
+  <text x="232" y="88" text-anchor="end">UB</text>
+  <polygon points="660,144 678,144 678,171 686.5,171 669,199 651.5,171 660,171" fill="#582877" stroke="#191919" stroke-width="2.4"/>
+  <g id="even">
+    <rect x="148" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="175" y="270" text-anchor="middle" class="value">0</text>
+    <rect x="202" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="229" y="270" text-anchor="middle" class="value">2</text>
+    <rect x="256" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="283" y="270" text-anchor="middle" class="value">4</text>
+    <rect x="310" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="337" y="270" text-anchor="middle" class="value">6</text>
+    <rect x="364" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="391" y="270" text-anchor="middle" class="value">8</text>
+    <rect x="418" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="445" y="270" text-anchor="middle" class="value">10</text>
+    <rect x="472" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="499" y="270" text-anchor="middle" class="value">12</text>
+    <rect x="526" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="553" y="270" text-anchor="middle" class="value">14</text>
+  </g>
+  <text x="124" y="270" text-anchor="end">even</text>
+  <path d="M 148 293 Q 148 315 157 315 H 571 Q 580 315 580 293 M 364 315 V 333" fill="none" stroke="#191919" stroke-width="2.4"/>
+  <text x="364" y="366" text-anchor="middle">even positions</text>
+  <g id="odd">
+    <rect x="788" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="815" y="270" text-anchor="middle" class="value">1</text>
+    <rect x="842" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="869" y="270" text-anchor="middle" class="value">3</text>
+    <rect x="896" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="923" y="270" text-anchor="middle" class="value">5</text>
+    <rect x="950" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="977" y="270" text-anchor="middle" class="value">7</text>
+    <rect x="1004" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="1031" y="270" text-anchor="middle" class="value">9</text>
+    <rect x="1058" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="1085" y="270" text-anchor="middle" class="value">11</text>
+    <rect x="1112" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="1139" y="270" text-anchor="middle" class="value">13</text>
+    <rect x="1166" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="1193" y="270" text-anchor="middle" class="value">15</text>
+  </g>
+  <text x="764" y="270" text-anchor="end">odd</text>
+  <path d="M 788 293 Q 788 315 797 315 H 1211 Q 1220 315 1220 293 M 1004 315 V 333" fill="none" stroke="#191919" stroke-width="2.4"/>
+  <text x="1004" y="366" text-anchor="middle">odd positions</text>
+  <text x="640" y="427" text-anchor="middle" class="caption">vld2：连续读取 2N 个元素，返回两个 N 元素向量</text>
+  <text x="640" y="460" text-anchor="middle" class="note">数字为相对起点的位置；实际 N：16 位为 128，32 位为 64。</text>
 </svg>

@@ -1,104 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="660" viewBox="0 0 960 660" role="img" aria-labelledby="title desc">
-  <title id="title">vintlv · 交错</title>
-  <desc id="desc">逐个交错两个输入，再按输入长度拆成两个结果。图中以 N=4 说明元素对应关系，实际长度见接口参数表。</desc>
-  <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#8292A4"/>
-    </marker>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="480" viewBox="0 0 1280 480" role="img" aria-labelledby="title desc">
+  <title id="title">vintlv：交错示意</title>
+  <desc id="desc">src1 为绿色，src2 为蓝色。输入逐元素交错后分成两个等长结果，dst0 取前半部分，dst1 取后半部分。格内数字表示源元素下标，不是元素值。每个输入用八个元素说明排列，实际长度见接口参数表。</desc>
   <style>
-    text { font-family: Arial, "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; fill: #183047; }
-    .title { font-size: 28px; font-weight: 700; }
-    .subtitle { font-size: 18px; fill: #536478; }
-    .label { font-size: 19px; font-weight: 600; }
-    .small { font-size: 17px; fill: #536478; }
-    .index { font-size: 15px; fill: #697889; }
-    .cell { font-size: 21px; font-weight: 600; }
+    text { font-family: Arial, "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; fill: #191919; font-size: 26px; }
+    .value { fill: #FFFFFF; }
+    .note { font-size: 20px; }
+    .index { font-size: 18px; }
+    .caption { font-size: 25px; }
   </style>
-  <rect x="0.5" y="0.5" width="959" height="659" rx="12" fill="#FFFFFF" stroke="#D5DFE9"/>
-  <text x="32" y="49" class="title">vintlv · 交错</text>
-  <text x="928" y="46" class="small" text-anchor="end">TLA / SIMD</text>
-  <text x="32" y="81" class="subtitle">逐个交错两个输入，再按输入长度拆成两个结果。</text>
-  <line x1="32" y1="103" x2="928" y2="103" stroke="#D5DFE9" stroke-width="1.5"/>
-  <!-- Two source vectors, shown with four logical elements each -->
-  <rect x="32" y="125" width="432" height="128" rx="8" fill="#F8FAFC" stroke="#D5DFE9"/>
-  <text x="52" y="156" class="label">src1</text>
-  <text x="444" y="156" class="small" text-anchor="end">N 个元素</text>
-  <rect x="52" y="182" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="98.0" y="214.0" class="cell" text-anchor="middle" style="fill:#214E94">a0</text>
-  <rect x="152" y="182" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="198.0" y="214.0" class="cell" text-anchor="middle" style="fill:#214E94">a1</text>
-  <rect x="252" y="182" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="298.0" y="214.0" class="cell" text-anchor="middle" style="fill:#214E94">a2</text>
-  <rect x="352" y="182" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="398.0" y="214.0" class="cell" text-anchor="middle" style="fill:#214E94">a3</text>
-  <rect x="496" y="125" width="432" height="128" rx="8" fill="#F8FAFC" stroke="#D5DFE9"/>
-  <text x="516" y="156" class="label">src2</text>
-  <text x="908" y="156" class="small" text-anchor="end">N 个元素</text>
-  <rect x="516" y="182" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="562.0" y="214.0" class="cell" text-anchor="middle" style="fill:#146350">b0</text>
-  <rect x="616" y="182" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="662.0" y="214.0" class="cell" text-anchor="middle" style="fill:#146350">b1</text>
-  <rect x="716" y="182" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="762.0" y="214.0" class="cell" text-anchor="middle" style="fill:#146350">b2</text>
-  <rect x="816" y="182" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="862.0" y="214.0" class="cell" text-anchor="middle" style="fill:#146350">b3</text>
-  <path d="M 248 254 V 277 H 480 V 300" fill="none" stroke="#8292A4" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
-  <path d="M 712 254 V 277 H 480" fill="none" stroke="#8292A4" stroke-width="1.6" stroke-linejoin="round"/>
-  <text x="480" y="326" class="label" text-anchor="middle">交错序列 · 2N 个元素</text>
-  <!-- Logical order after concatenation or interleave -->
-  <rect x="80" y="360" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="126.0" y="392.0" class="cell" text-anchor="middle" style="fill:#214E94">a0</text>
-  <text x="126.0" y="350" class="index" text-anchor="middle">0</text>
-  <rect x="181" y="360" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="227.0" y="392.0" class="cell" text-anchor="middle" style="fill:#146350">b0</text>
-  <text x="227.0" y="350" class="index" text-anchor="middle">1</text>
-  <rect x="282" y="360" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="328.0" y="392.0" class="cell" text-anchor="middle" style="fill:#214E94">a1</text>
-  <text x="328.0" y="350" class="index" text-anchor="middle">2</text>
-  <rect x="383" y="360" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="429.0" y="392.0" class="cell" text-anchor="middle" style="fill:#146350">b1</text>
-  <text x="429.0" y="350" class="index" text-anchor="middle">3</text>
-  <rect x="484" y="360" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="530.0" y="392.0" class="cell" text-anchor="middle" style="fill:#214E94">a2</text>
-  <text x="530.0" y="350" class="index" text-anchor="middle">4</text>
-  <rect x="585" y="360" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="631.0" y="392.0" class="cell" text-anchor="middle" style="fill:#146350">b2</text>
-  <text x="631.0" y="350" class="index" text-anchor="middle">5</text>
-  <rect x="686" y="360" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="732.0" y="392.0" class="cell" text-anchor="middle" style="fill:#214E94">a3</text>
-  <text x="732.0" y="350" class="index" text-anchor="middle">6</text>
-  <rect x="787" y="360" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="833.0" y="392.0" class="cell" text-anchor="middle" style="fill:#146350">b3</text>
-  <text x="833.0" y="350" class="index" text-anchor="middle">7</text>
-  <path d="M 80 419 V 429 H 475 V 419" fill="none" stroke="#8292A4" stroke-width="1.6" stroke-linejoin="round"/>
-  <path d="M 484 419 V 429 H 879 V 419" fill="none" stroke="#8292A4" stroke-width="1.6" stroke-linejoin="round"/>
-  <path d="M 277 430 V 442 H 248 V 455" fill="none" stroke="#8292A4" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
-  <path d="M 681 430 V 442 H 712 V 455" fill="none" stroke="#8292A4" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
-  <!-- Return values are separate vectors, each with N elements -->
-  <rect x="32" y="463" width="432" height="120" rx="8" fill="#F8FAFC" stroke="#D5DFE9"/>
-  <text x="52" y="494" class="label">结果 0</text>
-  <text x="444" y="494" class="small" text-anchor="end">前 N 个元素</text>
-  <rect x="52" y="512" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="98.0" y="544.0" class="cell" text-anchor="middle" style="fill:#214E94">a0</text>
-  <rect x="152" y="512" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="198.0" y="544.0" class="cell" text-anchor="middle" style="fill:#146350">b0</text>
-  <rect x="252" y="512" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="298.0" y="544.0" class="cell" text-anchor="middle" style="fill:#214E94">a1</text>
-  <rect x="352" y="512" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="398.0" y="544.0" class="cell" text-anchor="middle" style="fill:#146350">b1</text>
-  <rect x="496" y="463" width="432" height="120" rx="8" fill="#F8FAFC" stroke="#D5DFE9"/>
-  <text x="516" y="494" class="label">结果 1</text>
-  <text x="908" y="494" class="small" text-anchor="end">后 N 个元素</text>
-  <rect x="516" y="512" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="562.0" y="544.0" class="cell" text-anchor="middle" style="fill:#214E94">a2</text>
-  <rect x="616" y="512" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="662.0" y="544.0" class="cell" text-anchor="middle" style="fill:#146350">b2</text>
-  <rect x="716" y="512" width="92" height="50" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
-  <text x="762.0" y="544.0" class="cell" text-anchor="middle" style="fill:#214E94">a3</text>
-  <rect x="816" y="512" width="92" height="50" rx="6" fill="#E4F4EE" stroke="#19826B"/>
-  <text x="862.0" y="544.0" class="cell" text-anchor="middle" style="fill:#146350">b3</text>
-  <line x1="32" y1="592" x2="928" y2="592" stroke="#D5DFE9" stroke-width="1.5"/>
-  <text x="32" y="617" class="small">位置示意使用 N = 4；实际输入长度见参数表。</text>
+  <rect width="1280" height="480" fill="#FFFFFF"/>
+  <g id="src-0">
+    <rect x="148" y="46" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="175" y="86" text-anchor="middle" class="value">0</text>
+    <rect x="202" y="46" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="229" y="86" text-anchor="middle" class="value">1</text>
+    <rect x="256" y="46" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="283" y="86" text-anchor="middle" class="value">2</text>
+    <rect x="310" y="46" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="337" y="86" text-anchor="middle" class="value">3</text>
+    <rect x="364" y="46" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="391" y="86" text-anchor="middle" class="value">4</text>
+    <rect x="418" y="46" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="445" y="86" text-anchor="middle" class="value">5</text>
+    <rect x="472" y="46" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="499" y="86" text-anchor="middle" class="value">6</text>
+    <rect x="526" y="46" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="553" y="86" text-anchor="middle" class="value">7</text>
+  </g>
+  <text x="124" y="86" text-anchor="end">src1</text>
+  <g id="src-1">
+    <rect x="788" y="46" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="815" y="86" text-anchor="middle" class="value">0</text>
+    <rect x="842" y="46" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="869" y="86" text-anchor="middle" class="value">1</text>
+    <rect x="896" y="46" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="923" y="86" text-anchor="middle" class="value">2</text>
+    <rect x="950" y="46" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="977" y="86" text-anchor="middle" class="value">3</text>
+    <rect x="1004" y="46" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="1031" y="86" text-anchor="middle" class="value">4</text>
+    <rect x="1058" y="46" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="1085" y="86" text-anchor="middle" class="value">5</text>
+    <rect x="1112" y="46" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="1139" y="86" text-anchor="middle" class="value">6</text>
+    <rect x="1166" y="46" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="1193" y="86" text-anchor="middle" class="value">7</text>
+  </g>
+  <text x="764" y="86" text-anchor="end">src2</text>
+  <polygon points="660,144 678,144 678,171 686.5,171 669,199 651.5,171 660,171" fill="#582877" stroke="#191919" stroke-width="2.4"/>
+  <g id="dst-0">
+    <rect x="148" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="175" y="270" text-anchor="middle" class="value">0</text>
+    <rect x="202" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="229" y="270" text-anchor="middle" class="value">0</text>
+    <rect x="256" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="283" y="270" text-anchor="middle" class="value">1</text>
+    <rect x="310" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="337" y="270" text-anchor="middle" class="value">1</text>
+    <rect x="364" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="391" y="270" text-anchor="middle" class="value">2</text>
+    <rect x="418" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="445" y="270" text-anchor="middle" class="value">2</text>
+    <rect x="472" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="499" y="270" text-anchor="middle" class="value">3</text>
+    <rect x="526" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="553" y="270" text-anchor="middle" class="value">3</text>
+  </g>
+  <text x="124" y="270" text-anchor="end">dst0</text>
+  <path d="M 148 293 Q 148 315 157 315 H 571 Q 580 315 580 293 M 364 315 V 333" fill="none" stroke="#191919" stroke-width="2.4"/>
+  <text x="364" y="366" text-anchor="middle">lower part</text>
+  <g id="dst-1">
+    <rect x="788" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="815" y="270" text-anchor="middle" class="value">4</text>
+    <rect x="842" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="869" y="270" text-anchor="middle" class="value">4</text>
+    <rect x="896" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="923" y="270" text-anchor="middle" class="value">5</text>
+    <rect x="950" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="977" y="270" text-anchor="middle" class="value">5</text>
+    <rect x="1004" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="1031" y="270" text-anchor="middle" class="value">6</text>
+    <rect x="1058" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="1085" y="270" text-anchor="middle" class="value">6</text>
+    <rect x="1112" y="230" width="54" height="62" fill="#4B8B1B" stroke="#191919" stroke-width="2.4"/>
+  <text x="1139" y="270" text-anchor="middle" class="value">7</text>
+    <rect x="1166" y="230" width="54" height="62" fill="#146889" stroke="#191919" stroke-width="2.4"/>
+  <text x="1193" y="270" text-anchor="middle" class="value">7</text>
+  </g>
+  <text x="764" y="270" text-anchor="end">dst1</text>
+  <path d="M 788 293 Q 788 315 797 315 H 1211 Q 1220 315 1220 293 M 1004 315 V 333" fill="none" stroke="#191919" stroke-width="2.4"/>
+  <text x="1004" y="366" text-anchor="middle">higher part</text>
+  <text x="640" y="427" text-anchor="middle" class="caption">vintlv：交错示意（8 元素示例）</text>
+  <text x="640" y="460" text-anchor="middle" class="note">数字为源元素下标；图中 8 元素仅作排列示意。</text>
 </svg>
