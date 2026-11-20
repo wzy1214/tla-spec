@@ -635,6 +635,8 @@ def example(a_ub):
 | `mask` | 控制各 lane 是否启用的谓词 | tla.vector（int1 谓词） 或 None | 数据类型：<br>B1：int1<br>lane 数：与相应向量一致 | None 表示全部参与；mask 为 false 的位置返回 false。 | None |
 | `op` | 比较关系 | 编译期 tla.simd.CMP 枚举 | CMP.EQ / CMP.NE / CMP.GT / CMP.GE / CMP.LT / CMP.LE / CMP.UGT / CMP.UGE / CMP.ULT / CMP.ULE | 仅接受 CMP 枚举成员。GT / GE / LT / LE 按输入 dtype 比较；UGT / UGE / ULT / ULE 按无符号位模式比较，只接受整数。 | CMP.EQ |
 
+![vcmp 逐元素比较与 mask 对结果的影响](images/simd/vcmp.svg)
+
 **调用示例**
 
 输入为各含 64 个 float32 元素的连续 UB 缓冲区。
@@ -727,6 +729,8 @@ float16 → float32 时，EVEN / ODD 分别读取源的偶数 / 奇数位置；f
 
 浮点转整数先舍入，再按 sat 决定是否饱和；sat=False 不保证溢出回绕。浮点特殊值按目标指令处理，整数转浮点和浮点缩窄可能丢失精度。
 
+![vcvt 在 float32 与 float16 间转换时的奇偶位置和源 mask 对应关系](images/simd/vcvt.svg)
+
 **调用示例**
 
 a_ub 为连续 64 个 int32 元素；本例使用默认 ROUND.R。
@@ -757,6 +761,8 @@ def example(a_ub):
 | `src2` | 第二个输入向量 | tla.vector | 数据类型：<br>B8：float8e4m3fn / float8e5m2 / int8 / uint8<br>B16：int16 / uint16 / float16 / bfloat16<br>B32：int32 / uint32 / float32<br>B64：不支持 | 两个输入同 dtype（含符号性）、同 lane 数；不一致抛 ValueError，不隐式转换。两个结果均与输入同型。 | 必填 |
 
 先拼接两个输入，再分别取偶数和奇数位置。
+
+![vdintlv 拼接两个向量后按偶数和奇数位置拆分](images/simd/vdintlv.svg)
 
 **调用示例**
 
@@ -978,6 +984,8 @@ def example(x_ub, indices_ub):
 
 将两个输入逐元素交错，再按输入长度分成两个结果。
 
+![vintlv 交错两个向量并返回前后两个结果](images/simd/vintlv.svg)
+
 **调用示例**
 
 输入为各含 64 个 float32 元素的连续 UB 缓冲区。
@@ -1075,6 +1083,8 @@ def example(x_ub):
 
 设每个寄存器有 N 个元素，从最终起点连续读 2N 个元素：even[i] 取第 2i 个，odd[i] 取第 2i+1 个。16 位数据 N=128，32 位数据 N=64。无 mask，也不更新地址。
 
+![vld2 连续加载 UB 数据并按奇偶位置返回两个向量](images/simd/vld2.svg)
+
 **调用示例**
 
 x_ub 为连续 128 个 float32 元素，满足完整读取范围。
@@ -1107,6 +1117,8 @@ def example(x_ub):
 有限正数输入范围为 `0 < x ≤ 65504`（float16）或 `0 < x ≤ (2−2⁻²³)×2¹²⁷`（float32）的可表示值。零、负数、Inf、NaN 和非规格化数的行为须按目标确认；不逐 lane 检查数值。
 
 例如输入 `1、e、e²`，结果约为 `0、1、2`；实际结果有浮点舍入误差。
+
+![vln 的逐元素自然对数以及 ZEROING 和 MERGING 行为](images/simd/vln.svg)
 
 **调用示例**
 
@@ -2090,6 +2102,8 @@ def example():
 
 两个输入必须都是 int1 且 lane 数相同；不一致或 lane 数不在 64 / 128 / 256 中时抛 ValueError，不做隐式转换或广播。
 
+![pintlv 交错两个逻辑谓词并返回前后两个结果](images/simd/pintlv.svg)
+
 **调用示例**
 
 a、b 都是 64 lanes 的逻辑谓词。
@@ -2125,6 +2139,8 @@ def example():
 同一谓词密度下，pdintlv(*pintlv(a, b)) 恢复 a、b。宽度由输入 lane 数确定，不接收 width、mask 或 mode 参数；两个输出都可独立使用。
 
 两个输入必须都是 int1 且 lane 数相同；不一致或 lane 数不在 64 / 128 / 256 中时抛 ValueError，不做隐式转换或广播。
+
+![pdintlv 将拼接后的逻辑谓词按奇偶位置拆分](images/simd/pdintlv.svg)
 
 **调用示例**
 

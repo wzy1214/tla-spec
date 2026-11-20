@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="900" viewBox="0 0 960 900" role="img" aria-labelledby="title desc">
+  <title id="title">vcvt · 转换与位置选择</title>
+  <desc id="desc">缩窄转换将源元素写到结果的偶数或奇数位置，扩宽转换从源的偶数或奇数位置取数。未写入位置在 ZEROING 下填零，在 MERGING 下保留 merge 对应位置。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#8292A4"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; fill: #183047; }
+    .title { font-size: 28px; font-weight: 700; }
+    .subtitle { font-size: 18px; fill: #536478; }
+    .label { font-size: 19px; font-weight: 600; }
+    .small { font-size: 17px; fill: #536478; }
+    .index { font-size: 15px; fill: #697889; }
+    .cell { font-size: 21px; font-weight: 600; }
+  </style>
+  <rect x="0.5" y="0.5" width="959" height="899" rx="12" fill="#FFFFFF" stroke="#D5DFE9"/>
+  <text x="32" y="49" class="title">vcvt · 转换与位置选择</text>
+  <text x="928" y="46" class="small" text-anchor="end">TLA / SIMD</text>
+  <text x="32" y="81" class="subtitle">以 float32 ↔ float16 为例，mask 总是对应源元素。</text>
+  <line x1="32" y1="103" x2="928" y2="103" stroke="#D5DFE9" stroke-width="1.5"/>
+  <rect x="24" y="123" width="912" height="323" rx="8" fill="#F8FAFC" stroke="#D5DFE9"/>
+  <text x="44" y="155" class="label">01  缩窄：float32 → float16</text>
+  <rect x="24" y="472" width="912" height="323" rx="8" fill="#F8FAFC" stroke="#D5DFE9"/>
+  <text x="44" y="504" class="label">02  扩宽：float16 → float32</text>
+  <text x="44" y="215.0" class="label">src</text>
+  <rect x="250" y="186" width="154" height="44" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
+  <text x="327.0" y="215.0" class="cell" text-anchor="middle" style="fill:#214E94">a</text>
+  <text x="327.0" y="176" class="index" text-anchor="middle">0</text>
+  <rect x="414" y="186" width="154" height="44" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
+  <text x="491.0" y="215.0" class="cell" text-anchor="middle" style="fill:#214E94">b</text>
+  <text x="491.0" y="176" class="index" text-anchor="middle">1</text>
+  <rect x="578" y="186" width="154" height="44" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
+  <text x="655.0" y="215.0" class="cell" text-anchor="middle" style="fill:#214E94">c</text>
+  <text x="655.0" y="176" class="index" text-anchor="middle">2</text>
+  <rect x="742" y="186" width="154" height="44" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
+  <text x="819.0" y="215.0" class="cell" text-anchor="middle" style="fill:#214E94">d</text>
+  <text x="819.0" y="176" class="index" text-anchor="middle">3</text>
+  <text x="44" y="266.0" class="label">mask</text>
+  <rect x="250" y="243" width="154" height="32" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="327.0" y="266.0" class="cell" text-anchor="middle" style="fill:#146350">true</text>
+  <rect x="414" y="243" width="154" height="32" rx="6" fill="#F1F3F5" stroke="#C5CED7"/>
+  <text x="491.0" y="266.0" class="cell" text-anchor="middle" style="fill:#697889">false</text>
+  <rect x="578" y="243" width="154" height="32" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="655.0" y="266.0" class="cell" text-anchor="middle" style="fill:#146350">true</text>
+  <rect x="742" y="243" width="154" height="32" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="819.0" y="266.0" class="cell" text-anchor="middle" style="fill:#146350">true</text>
+  <text x="44" y="334.0" class="label">EVEN</text>
+  <rect x="250" y="305" width="72" height="44" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
+  <text x="286.0" y="334.0" class="cell" text-anchor="middle" style="fill:#214E94">a′</text>
+  <rect x="332" y="305" width="72" height="44" rx="6" fill="#F1F3F5" stroke="#C5CED7" stroke-dasharray="4 3"/>
+  <text x="368.0" y="334.0" class="cell" text-anchor="middle" style="fill:#697889">—</text>
+  <rect x="414" y="305" width="72" height="44" rx="6" fill="#F1F3F5" stroke="#C5CED7" stroke-dasharray="4 3"/>
+  <text x="450.0" y="334.0" class="cell" text-anchor="middle" style="fill:#697889">—</text>
+  <rect x="496" y="305" width="72" height="44" rx="6" fill="#F1F3F5" stroke="#C5CED7" stroke-dasharray="4 3"/>
+  <text x="532.0" y="334.0" class="cell" text-anchor="middle" style="fill:#697889">—</text>
+  <rect x="578" y="305" width="72" height="44" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
+  <text x="614.0" y="334.0" class="cell" text-anchor="middle" style="fill:#214E94">c′</text>
+  <rect x="660" y="305" width="72" height="44" rx="6" fill="#F1F3F5" stroke="#C5CED7" stroke-dasharray="4 3"/>
+  <text x="696.0" y="334.0" class="cell" text-anchor="middle" style="fill:#697889">—</text>
+  <rect x="742" y="305" width="72" height="44" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
+  <text x="778.0" y="334.0" class="cell" text-anchor="middle" style="fill:#214E94">d′</text>
+  <rect x="824" y="305" width="72" height="44" rx="6" fill="#F1F3F5" stroke="#C5CED7" stroke-dasharray="4 3"/>
+  <text x="860.0" y="334.0" class="cell" text-anchor="middle" style="fill:#697889">—</text>
+  <text x="44" y="394.0" class="label">ODD</text>
+  <rect x="250" y="365" width="72" height="44" rx="6" fill="#F1F3F5" stroke="#C5CED7" stroke-dasharray="4 3"/>
+  <text x="286.0" y="394.0" class="cell" text-anchor="middle" style="fill:#697889">—</text>
+  <rect x="332" y="365" width="72" height="44" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
+  <text x="368.0" y="394.0" class="cell" text-anchor="middle" style="fill:#214E94">a′</text>
+  <rect x="414" y="365" width="72" height="44" rx="6" fill="#F1F3F5" stroke="#C5CED7" stroke-dasharray="4 3"/>
+  <text x="450.0" y="394.0" class="cell" text-anchor="middle" style="fill:#697889">—</text>
+  <rect x="496" y="365" width="72" height="44" rx="6" fill="#F1F3F5" stroke="#C5CED7" stroke-dasharray="4 3"/>
+  <text x="532.0" y="394.0" class="cell" text-anchor="middle" style="fill:#697889">—</text>
+  <rect x="578" y="365" width="72" height="44" rx="6" fill="#F1F3F5" stroke="#C5CED7" stroke-dasharray="4 3"/>
+  <text x="614.0" y="394.0" class="cell" text-anchor="middle" style="fill:#697889">—</text>
+  <rect x="660" y="365" width="72" height="44" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
+  <text x="696.0" y="394.0" class="cell" text-anchor="middle" style="fill:#214E94">c′</text>
+  <rect x="742" y="365" width="72" height="44" rx="6" fill="#F1F3F5" stroke="#C5CED7" stroke-dasharray="4 3"/>
+  <text x="778.0" y="394.0" class="cell" text-anchor="middle" style="fill:#697889">—</text>
+  <rect x="824" y="365" width="72" height="44" rx="6" fill="#EAF1FF" stroke="#3068BC"/>
+  <text x="860.0" y="394.0" class="cell" text-anchor="middle" style="fill:#214E94">d′</text>
+  <text x="44" y="564.0" class="label">src</text>
+  <rect x="250" y="535" width="72" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="286.0" y="564.0" class="cell" text-anchor="middle" style="fill:#146350">a</text>
+  <text x="286.0" y="525" class="index" text-anchor="middle">0</text>
+  <rect x="332" y="535" width="72" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="368.0" y="564.0" class="cell" text-anchor="middle" style="fill:#146350">b</text>
+  <text x="368.0" y="525" class="index" text-anchor="middle">1</text>
+  <rect x="414" y="535" width="72" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="450.0" y="564.0" class="cell" text-anchor="middle" style="fill:#146350">c</text>
+  <text x="450.0" y="525" class="index" text-anchor="middle">2</text>
+  <rect x="496" y="535" width="72" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="532.0" y="564.0" class="cell" text-anchor="middle" style="fill:#146350">d</text>
+  <text x="532.0" y="525" class="index" text-anchor="middle">3</text>
+  <rect x="578" y="535" width="72" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="614.0" y="564.0" class="cell" text-anchor="middle" style="fill:#146350">e</text>
+  <text x="614.0" y="525" class="index" text-anchor="middle">4</text>
+  <rect x="660" y="535" width="72" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="696.0" y="564.0" class="cell" text-anchor="middle" style="fill:#146350">f</text>
+  <text x="696.0" y="525" class="index" text-anchor="middle">5</text>
+  <rect x="742" y="535" width="72" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="778.0" y="564.0" class="cell" text-anchor="middle" style="fill:#146350">g</text>
+  <text x="778.0" y="525" class="index" text-anchor="middle">6</text>
+  <rect x="824" y="535" width="72" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="860.0" y="564.0" class="cell" text-anchor="middle" style="fill:#146350">h</text>
+  <text x="860.0" y="525" class="index" text-anchor="middle">7</text>
+  <text x="44" y="615.0" class="label">mask</text>
+  <rect x="250" y="592" width="72" height="32" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="286.0" y="615.0" class="cell" text-anchor="middle" style="fill:#146350">true</text>
+  <rect x="332" y="592" width="72" height="32" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="368.0" y="615.0" class="cell" text-anchor="middle" style="fill:#146350">true</text>
+  <rect x="414" y="592" width="72" height="32" rx="6" fill="#F1F3F5" stroke="#C5CED7"/>
+  <text x="450.0" y="615.0" class="cell" text-anchor="middle" style="fill:#697889">false</text>
+  <rect x="496" y="592" width="72" height="32" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="532.0" y="615.0" class="cell" text-anchor="middle" style="fill:#146350">true</text>
+  <rect x="578" y="592" width="72" height="32" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="614.0" y="615.0" class="cell" text-anchor="middle" style="fill:#146350">true</text>
+  <rect x="660" y="592" width="72" height="32" rx="6" fill="#F1F3F5" stroke="#C5CED7"/>
+  <text x="696.0" y="615.0" class="cell" text-anchor="middle" style="fill:#697889">false</text>
+  <rect x="742" y="592" width="72" height="32" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="778.0" y="615.0" class="cell" text-anchor="middle" style="fill:#146350">true</text>
+  <rect x="824" y="592" width="72" height="32" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="860.0" y="615.0" class="cell" text-anchor="middle" style="fill:#146350">true</text>
+  <text x="44" y="683.0" class="label">EVEN</text>
+  <rect x="250" y="654" width="154" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="327.0" y="683.0" class="cell" text-anchor="middle" style="fill:#146350">a′</text>
+  <rect x="414" y="654" width="154" height="44" rx="6" fill="#F1F3F5" stroke="#C5CED7" stroke-dasharray="4 3"/>
+  <text x="491.0" y="683.0" class="cell" text-anchor="middle" style="fill:#697889">—</text>
+  <rect x="578" y="654" width="154" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="655.0" y="683.0" class="cell" text-anchor="middle" style="fill:#146350">e′</text>
+  <rect x="742" y="654" width="154" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="819.0" y="683.0" class="cell" text-anchor="middle" style="fill:#146350">g′</text>
+  <text x="44" y="743.0" class="label">ODD</text>
+  <rect x="250" y="714" width="154" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="327.0" y="743.0" class="cell" text-anchor="middle" style="fill:#146350">b′</text>
+  <rect x="414" y="714" width="154" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="491.0" y="743.0" class="cell" text-anchor="middle" style="fill:#146350">d′</text>
+  <rect x="578" y="714" width="154" height="44" rx="6" fill="#F1F3F5" stroke="#C5CED7" stroke-dasharray="4 3"/>
+  <text x="655.0" y="743.0" class="cell" text-anchor="middle" style="fill:#697889">—</text>
+  <rect x="742" y="714" width="154" height="44" rx="6" fill="#E4F4EE" stroke="#19826B"/>
+  <text x="819.0" y="743.0" class="cell" text-anchor="middle" style="fill:#146350">h′</text>
+  <text x="44" y="431" class="small">EVEN 写偶数位置；ODD 写奇数位置。</text>
+  <text x="44" y="780" class="small">EVEN 读源的偶数位置；ODD 读源的奇数位置。</text>
+  <line x1="32" y1="807" x2="928" y2="807" stroke="#D5DFE9" stroke-width="1.5"/>
+  <text x="32" y="832" class="small">a′ 表示转换后的 a；只展示向量开头，省略后续元素。</text>
+  <text x="32" y="857" class="small">灰色 — 位置：ZEROING 填 0；MERGING 取 merge 对应位置的值。</text>
+</svg>
